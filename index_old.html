@@ -1,0 +1,155 @@
+<html class="">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Internet Matrix, Inc. - Online Support - Website Hosting In San Diego, CA USA :: Website</title>
+    <link rel="shortcut icon" href="http://support.imatrix.com/images/brands/imatrix/common/favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/rltm/web/rltm.js"></script>
+    <script src="bower_components/angular-chat/angular-chat.js"></script>
+    <script src="names.js"></script>
+    <script src="app2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js"></script>
+</head>
+
+<body>
+<div class="container ng-scope" ng-app="BasicChat">
+  <div class="row">
+
+    
+    <!-- uiView:  -->
+    <div ui-view="" class="ng-scope">
+    <div class="col-md-12 ng-scope">
+      <h3>Login Page</h3>
+      
+      <form ng-submit="formSubmit()" class="form ng-dirty ng-valid-parse ng-valid ng-valid-required ng-submitted">
+        <div class="col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control ng-dirty ng-valid-parse ng-valid ng-valid-required ng-touched" ng-model="username" placeholder="username" required="">
+          </div> 
+
+          <div class="form-group">
+            <input type="password" class="form-control ng-dirty ng-valid-parse ng-valid ng-valid-required ng-touched" ng-model="password" placeholder="password" required="">
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Login</button>
+            <span class="text-danger ng-binding">Incorrect username/password !</span>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+    
+  </div>
+  
+  <script type="text/ng-template" id="login.html">
+    <div class="col-md-12">
+      <h3>Login Page</h3>
+      
+      <form ng-submit="formSubmit()" class="form">
+        <div class="col-md-4">
+          <div class="form-group">
+            <input type="text" class="form-control" ng-model="username" placeholder="username" required=""/>
+          </div> 
+
+          <div class="form-group">
+            <input type="password" class="form-control" ng-model="password" placeholder="password" required=""/>
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-success">Login</button>
+            <span class="text-danger">{{ error }}</span>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </script>
+  
+  <script type="text/ng-template" id="home.html">
+
+        <div class="chat-container" ng-controller="BasicController">
+            <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -->
+            <!-- Chat Messages -->
+            <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -->
+            <div class="chat-messages">
+                <div class="chat-header">
+                    <div class="angularjs-chat-logo" style="display: none"></div>
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">iMatrix Chat</button>
+                </div>
+                <div class="alert alert-info">You are <strong id="whoami"><a ui-sref="login"> Anonymous </a> </strong></div>
+
+                <div ng-repeat="message in messages" class="hello">
+
+                    <div class="sent-message {{message.user.id}} {{message.user.name == me.name ? '' : message.user.color}}" ng-class="{me: message.user.name == me.name}">
+                    <div class="closeSign"></div>
+                        <span class="username">{{ message.user.name }}:</span>
+                        {{ message.data }}
+                    </div>
+
+                    <div class="clear"></div>
+
+                </div>
+            </div>
+
+            <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -->
+            <!-- User Input -->
+            <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -->
+            <form ng-submit="send()" class="chat-input">
+                <input type="text" ng-model="textbox" placeholder="Write a message here..." autofocus></textarea>
+                <input type="submit" class="send-icon" value=" ">
+                <input type="submit" value=" "
+                    class="sent-indicator {{ status }}">
+            </form>
+
+              <!-- Modal -->
+              <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog modal-sm">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">iMatrix Chat</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="chatForm" class="form-inline">
+                          <div class="form-group">
+                            <label for="name">Hero Name:</label>
+                            <input type="text" class="form-control" id="email" placeholder="Enter your Hero Name here" ng-model="username" autofocus>
+                          </div>
+                          <button type="submit" ng-click="add()" class="btn btn-default" data-dismiss="modal">Submit</button>
+                        </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+  </script>
+<script>
+$('.sent-message').hover(
+    function() {
+        $('.closeSign').show().append('X');
+    }, function() {
+        $('.closeSign').hide().empty();
+    }
+);
+
+$('.closeSign').on('click', function() {
+  $(this).parent().hide();
+  // or any other stuff as you want
+});
+</script>
+</div>
+</body>
+</html>

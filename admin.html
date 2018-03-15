@@ -1,0 +1,128 @@
+<!-- includes -->
+<html class="">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>Internet Matrix, Inc. - Online Support - Website Hosting In San Diego, CA USA :: Website</title>
+    <link rel="shortcut icon" href="http://support.imatrix.com/images/brands/imatrix/common/favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/rltm/web/rltm.js"></script>
+    <script src="bower_components/angular-chat/angular-chat.js"></script>
+    <script src="names.js"></script>
+    <script src="app2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.js"></script>
+</head>
+
+<body style="overflow: scroll; height: 100%">
+<!-- configuration -->
+<script>
+var chat = angular.module( 'BasicChat', ['chat'] );
+</script>
+
+
+<!-- controller -->
+<script>
+chat.controller('chat', ['Messages', '$scope', function(Messages, $scope) {
+
+    // Message Inbox
+    $scope.chats = {};
+
+    Messages.user({id: "support-agent", name: "Support Agent"});
+
+    // Receive Messages
+    Messages.receive(function(message, isPrivate) {
+        
+        // isPrivate is always true
+
+        // create a new chat if doesn't exist
+        if(!$scope.chats[message.user.id]) {
+
+            $scope.chats[message.user.id] = {
+                user: message.user,
+                messages: []
+            };
+
+        }
+        
+        // add messages to the chat
+        $scope.chats[message.user.id].messages.push(message);
+
+    });
+
+    // Send Messages
+    $scope.send = function(to, text) {
+
+        var message = { 
+            to: to,
+            data: text,
+            user: Messages.user()
+        };
+
+        Messages.send(message);
+
+        // because we are sending a message to a user's personal channel,
+        // but not subscribing to it we need to keep track of sent messages 
+        // ourselves
+        $scope.chats[to].messages.push(message);
+        $scope.chats[to].textbox="";
+
+    };
+
+}]);
+</script>
+
+<!-- view -->
+<div class="container ng-scope" ng-app="BasicChat" style="width: 100%">
+  <div class="row" ng-controller="chat">
+  
+       <div class="chat-messages">
+                <div class="chat-header">
+                    <div class="angularjs-chat-logo" style="display: none"></div>
+                    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">iMatrix Chat</button>
+                </div> 
+
+                 <div class="alert alert-info">You are <strong id="whoami"><a ui-sref="login"> Support Agent </a> </strong></div>
+
+   
+           <div ng-repeat="chat in chats">
+            
+            <h2>Chat with <b>{{chat.user.name}}</b></h2>
+            
+            <hr />
+
+            <div ng-repeat="message in chat.messages">
+                    <div class="sent-message {{message.user.id}} {{message.user.name == me.name ? '' : message.user.color}}" ng-class="{me: message.user.name == me.name}">
+                    <div class="closeSign"></div>
+                        <span class="username">{{ message.user.name }}:</span>
+                        {{ message.data }}
+                    </div>
+                    <div class="clear"></div>
+            </div>
+
+
+            <form ng-submit="send(chat.user.id, chat.textbox)" class="chat-input" style="margin-top: 10px">
+                <input type="text" ng-model="chat.textbox" placeholder="Write a message here..." autofocus></textarea>
+                <input type="submit" class="send-icon" value=" ">
+                <input type="submit" value=" " class="sent-indicator {{ status }}">
+            </form>
+ 
+          </div>
+      </div> 
+        
+   </div>
+
+    
+</div>
+
+</body>
+</html>
